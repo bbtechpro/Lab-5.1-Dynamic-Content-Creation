@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <script defer src="script.js"></script>
   <title>Dynamic Shopping Cart</title>
 </head>
+
 <body>
   <h1>Dynamic Shopping Cart</h1>
   <div id="product-container">
@@ -14,7 +16,13 @@
     <input type="number" id="product-price" placeholder="Product Price" step="0.01" min="0">
     <button id="add-product">Add Product</button>
   </div>
+  <div style="display: flex; gap: 15px">
+    <button id="sub" style="width: 25px">-</button>
+    <div id='count' style="width: 25px; text-align: center; line-height: 25px">0</div>
+    <button id="add" style="width: 25px">+</button>
+  </div>
   <ul id="cart"></ul>
   <h3>Total: $<span id="total-price">0</span></h3>
- </body>
+</body>
+
 </html>
