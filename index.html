@@ -4,25 +4,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <script defer src="script.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="./script.js"></script>
   <title>Dynamic Shopping Cart</title>
 </head>
 
-<body>
-  <h1>Dynamic Shopping Cart</h1>
-  <div id="product-container">
-    <input type="text" id="product-name" placeholder="Product Name">
-    <input type="number" id="product-price" placeholder="Product Price" step="0.01" min="0">
-    <button id="add-product">Add Product</button>
+<body class="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 font-sans text-slate-900 antialiased">
+  <!-- Classes referenced only from script.js (Play CDN scans the document, not external JS). -->
+  <span id="tailwind-safelist-cart"
+    class="pointer-events-none fixed -left-[9999px] opacity-0 flex flex-wrap items-center gap-2 py-3 px-4 bg-white rounded-lg border border-slate-200 shadow-sm flex-1 min-w-[12rem] text-sm font-medium text-slate-800 inline-flex h-9 w-9 justify-center rounded-md border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100 text-lg leading-none transition ml-auto bg-red-50 px-3 py-1.5 text-red-700 border-red-200 hover:bg-red-100"
+    aria-hidden="true"></span>
+
+  <div class="max-w-xl mx-auto px-4 py-12 space-y-8">
+    <h1 class="text-3xl font-bold tracking-tight text-center text-slate-900">Dynamic Shopping Cart</h1>
+
+    <div id="product-container"
+      class="flex flex-col sm:flex-row gap-3 p-6 bg-white rounded-xl shadow-md border border-slate-200/80">
+      <input type="text" id="product-name" placeholder="Product name"
+        class="flex-1 rounded-lg border border-slate-300 px-4 py-2.5 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+      <input type="number" id="product-price" placeholder="Price" step="0.01" min="0"
+        class="flex-1 rounded-lg border border-slate-300 px-4 py-2.5 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+      <button type="button" id="add-product"
+        class="shrink-0 rounded-lg bg-indigo-600 px-3 py-2.5 text-sm font-semibold text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-50 transition">
+        Add Product
+      </button>
+    </div>
+
+    <ul id="cart" class="space-y-3 list-none p-0"></ul>
+
+    <h3 class="text-lg font-semibold pt-4 border-t border-slate-200">
+      Total:
+      <span class="tabular-nums text-indigo-600">$<span id="total-price">0</span></span>
+    </h3>
   </div>
-  <div style="display: flex; gap: 15px">
-    <button id="sub" style="width: 25px">-</button>
-    <div id='count' style="width: 25px; text-align: center; line-height: 25px">0</div>
-    <button id="add" style="width: 25px">+</button>
-  </div>
-  <ul id="cart"></ul>
-  <h3>Total: $<span id="total-price">0</span></h3>
 </body>
 
 </html>

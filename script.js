@@ -1,77 +1,88 @@
-//Add Products:
-
-// Test adding products with different names and prices.
-// Ensure each product appears in the list with the correct price.
-// Remove Products:
-
-// Test removing products from the cart.
-// Verify that the total price updates accurately after removing items.
-// Edge Cases:
-
-// Attempt to add products with empty names or invalid prices and ensure the application handles these cases gracefully.
-// Enhance the App (Optional):
-
-// Allow users to update the quantity of products in the cart and recalculate the total price.
-
 const productNameInput = document.getElementById('product-name');
 const productPriceInput = document.getElementById('product-price');
 const addProductButton = document.getElementById('add-product');
 const cart = document.getElementById('cart');
 const totalPriceSpan = document.getElementById('total-price');
 
+const cartItemClass =
+  'flex flex-wrap items-center gap-2 py-3 px-4 bg-white rounded-lg border border-slate-200 shadow-sm';
+const cartInfoClass = 'flex-1 min-w-[12rem] text-sm font-medium text-slate-800';
+const qtyBtnClass =
+  'inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100 text-lg font-medium leading-none transition';
+const removeBtnClass =
+  'ml-auto rounded-md bg-red-50 px-3 py-1.5 text-sm font-medium text-red-700 border border-red-200 hover:bg-red-100 transition';
+
 let totalPrice = 0;
- 
-// Function to update the total price
+
 function updateTotalPrice(amount) {
   totalPrice += amount;
   totalPriceSpan.textContent = totalPrice.toFixed(2);
 }
- 
-// Function to remove an item
-function removeItem(event) {
-  const item = event.target.closest('li');
-  const price = parseFloat(item.dataset.price);
-  updateTotalPrice(-price);
-  item.remove();
-}
+
 addProductButton.addEventListener('click', () => {
   const name = productNameInput.value.trim();
   const price = parseFloat(productPriceInput.value);
-  if (!name || isNaN(price)) {
-    alert('Please enter valid product information.');
+
+  // Edge Case: Validation
+  if (!name || isNaN(price) || price <= 0) {
+    alert('Please enter a valid product name and price.');
     return;
   }
+
+  let quantity = 1;
   const item = document.createElement('li');
-  item.textContent = `${name}: $${price.toFixed(2)}`;
-  item.dataset.price = price;
-  const removeButton = document.createElement('button');
-  removeButton.textContent = 'Remove';
-  removeButton.addEventListener('click', removeItem);
-  const updateQuantityButton = document.createElement('button');
-  updateQuantityButton.textContent = 'Update Quantity';
-  updateQuantityButton.addEventListener('click', updateQuantity);
-  item.appendChild(removeButton);
-  item.appendChild(updateQuantityButton);
+
+  // Create UI Elements for the row
+  const infoText = document.createElement('span');
+  infoText.textContent = `${name}: $${price.toFixed(2)} (x${quantity})`;
+  infoText.className = cartInfoClass;
+
+  const subBtn = document.createElement('button');
+  subBtn.type = 'button';
+  subBtn.textContent = '-';
+  subBtn.className = qtyBtnClass;
+
+  const addBtn = document.createElement('button');
+  addBtn.type = 'button';
+  addBtn.textContent = '+';
+  addBtn.className = qtyBtnClass;
+
+  const removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.textContent = 'Remove';
+  removeBtn.className = removeBtnClass;
+
+  // Increment Logic
+  addBtn.onclick = () => {
+    quantity++;
+    infoText.textContent = `${name}: $${price.toFixed(2)} (x${quantity})`;
+    updateTotalPrice(price);
+  };
+
+  // Decrement Logic
+  subBtn.onclick = () => {
+    if (quantity > 1) {
+      quantity--;
+      infoText.textContent = `${name}: $${price.toFixed(2)} (x${quantity})`;
+      updateTotalPrice(-price);
+    }
+  };
+
+  // Remove Logic
+  removeBtn.onclick = () => {
+    updateTotalPrice(-(price * quantity));
+    item.remove();
+  };
+
+  // Build the list item
+  item.className = cartItemClass;
+  item.append(infoText, subBtn, addBtn, removeBtn);
   cart.appendChild(item);
+
+  // Initial Update
   updateTotalPrice(price);
+
+  // Clear Inputs
   productNameInput.value = '';
   productPriceInput.value = '';
 });
-//the update quantity function is not working properly, it is not updating the quantity and price correctly. It is also not updating the total price correctly. I need to fix this function to make it work properly.
-function updateQuantity(event) {
-  const item = event.target.closest('li');
-//   const updateQuantityButton = item.querySelector('button');
-  updateQuantityButton.textContent = 'Update Quantity';
-  const newQuantity = parseInt(prompt('Enter new quantity:'));
-  if (isNaN(newQuantity) || newQuantity < 1) {
-  alert('Please enter a valid quantity.');
-  return;
-  }
-  const price = parseFloat(item.dataset.price);
-  updateTotalPrice(-price);
-  item.quantity();
-    item.dataset.price = (price / item.dataset.quantity) * newQuantity;
-    item.textContent = `${item.dataset.name}: $${parseFloat(item.dataset.price).toFixed(2)}`;
-    updateTotalPrice(parseFloat(item.dataset.price));
-}
-
